@@ -46,6 +46,10 @@ public class MyActivity extends Activity implements OnClickListener {
         init();
     }
 
+    //---------------------------------------------------
+    // Initializing Code And Handling Input
+    //---------------------------------------------------
+
     private void init() {
         // Columns for TextView "check in, check out, total time"
         columnCheckIn = (LinearLayout) findViewById(R.id.column_check_in);
@@ -71,6 +75,75 @@ public class MyActivity extends Activity implements OnClickListener {
         bMonthlyTotals = (Button) findViewById(R.id.month_total);
         bMonthlyTotals.setOnClickListener(this);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.check_in:
+                // Check if check_out was pressed last
+                if (!canCheckOut) {
+                    createCheckInTextView();
+                    canCheckOut = true;
+                }
+                break;
+            case R.id.check_out:
+                // Check if check_in was pressed last
+                if (canCheckOut) {
+                    createCheckOutTextView();
+                    createTotalTextView();
+                    canCheckOut = false;
+                }
+                break;
+            case R.id.add_check_in:
+                if (!canCheckOut) {
+                    System.out.println("Add check in");
+                }
+                break;
+            case R.id.add_check_out:
+                if (canCheckOut) {
+                    System.out.println("Add check out");
+                }
+                break;
+            case R.id.day_total:
+                System.out.println("Day Totals");
+                Intent intent = new Intent(this, DailyTotals.class);
+                startActivity(intent);
+                break;
+            case R.id.week_total:
+                System.out.println("Week totals");
+                break;
+            case R.id.month_total:
+                System.out.println("Month totals");
+                break;
+
+            // Checks to see if any of the dynamically created TextView have been pressed
+            default:
+                for (int i = 0; i < checkInId.size(); i++) {
+                    if (checkInId.get(i) == v.getId()) {
+                        System.out.println("Check in " + v.getId());
+                        break;
+                    }
+                }
+
+                for (int j = 0; j < checkOutId.size(); j++) {
+                    if (checkOutId.get(j) == v.getId()) {
+                        System.out.println("Check out " + v.getId());
+                        break;
+                    }
+                }
+                for (int k = 0; k < totalId.size(); k++) {
+                    if (totalId.get(k) == v.getId()) {
+                        System.out.println("Total " + v.getId());
+                        break;
+                    }
+                    break;
+                }
+        }
+    }
+
+    //---------------------------------------------------
+    // Get Time/Date Methods
+    //---------------------------------------------------
 
     private String getCurrentDate() {
         calendar = Calendar.getInstance();
@@ -154,6 +227,10 @@ public class MyActivity extends Activity implements OnClickListener {
 
         return time;
     }
+
+    //---------------------------------------------------
+    // Methods For Dynamically Creating TextViews
+    //---------------------------------------------------
 
     /**
      * Creates and adds a new TextView to {@link #columnCheckIn} and {@link #dailyCheckInView}. Sets the Id and saves it to {@code checkInId}.
@@ -242,6 +319,10 @@ public class MyActivity extends Activity implements OnClickListener {
         FileIO.saveToInternalStorage(totalTime, this, date + FileIO.DAILY_TOTAL);
     }
 
+    //---------------------------------------------------
+    // Methods For Loading And Creating TextViews Of Current Day Logs
+    //---------------------------------------------------
+
     private void addCheckInTextView(int position) {
         TextView textView = new TextView(this);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50);
@@ -297,71 +378,6 @@ public class MyActivity extends Activity implements OnClickListener {
         totalTime = FileIO.readFromInternalStorage(this, date + FileIO.DAILY_TOTAL);
         for (int i = 0; i < totalTime.size(); i++) {
             addTotalTextView(i);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.check_in:
-                // Check if check_out was pressed last
-                if (!canCheckOut) {
-                    createCheckInTextView();
-                    canCheckOut = true;
-                }
-                break;
-            case R.id.check_out:
-                // Check if check_in was pressed last
-                if (canCheckOut) {
-                    createCheckOutTextView();
-                    createTotalTextView();
-                    canCheckOut = false;
-                }
-                break;
-            case R.id.add_check_in:
-                if (!canCheckOut) {
-                    System.out.println("Add check in");
-                }
-                break;
-            case R.id.add_check_out:
-                if (canCheckOut) {
-                    System.out.println("Add check out");
-                }
-                break;
-            case R.id.day_total:
-                System.out.println("Day Totals");
-                Intent intent = new Intent(this, DailyTotals.class);
-                startActivity(intent);
-                break;
-            case R.id.week_total:
-                System.out.println("Week totals");
-                break;
-            case R.id.month_total:
-                System.out.println("Month totals");
-                break;
-
-            // Checks to see if any of the dynamically created TextView have been pressed
-            default:
-                for (int i = 0; i < checkInId.size(); i++) {
-                    if (checkInId.get(i) == v.getId()) {
-                        System.out.println("Check in " + v.getId());
-                        break;
-                    }
-                }
-
-                for (int j = 0; j < checkOutId.size(); j++) {
-                    if (checkOutId.get(j) == v.getId()) {
-                        System.out.println("Check out " + v.getId());
-                        break;
-                    }
-                }
-                for (int k = 0; k < totalId.size(); k++) {
-                    if (totalId.get(k) == v.getId()) {
-                        System.out.println("Total " + v.getId());
-                        break;
-                    }
-                    break;
-                }
         }
     }
 }

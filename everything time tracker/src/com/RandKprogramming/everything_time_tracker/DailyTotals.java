@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class DailyTotals extends Activity implements OnClickListener{
+public class DailyTotals extends Activity{
     ArrayList<String> checkIn;
     ArrayList<String> checkOut;
     ArrayList<String> total;
@@ -72,7 +72,6 @@ public class DailyTotals extends Activity implements OnClickListener{
         params.setMargins(0, 5, 0, 5);
         textView.setLayoutParams(params);
         textView.setId(position + 100);
-        textView.setOnClickListener(this);
         textView.setText(checkIn.get(position));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.check_in_button);
@@ -85,7 +84,6 @@ public class DailyTotals extends Activity implements OnClickListener{
         params.setMargins(0, 5, 0, 5);
         textView.setLayoutParams(params);
         textView.setId(position + 200);
-        textView.setOnClickListener(this);
         textView.setText(checkOut.get(position));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.check_out_button);
@@ -98,15 +96,9 @@ public class DailyTotals extends Activity implements OnClickListener{
         params.setMargins(0, 5, 0, 5);
         textView.setLayoutParams(params);
         textView.setId(position + 300);
-        textView.setOnClickListener(this);
         textView.setText(total.get(position));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.log_total_time);
         columnTotal.addView(textView);
-    }
-
-    @Override
-    public void onClick(View v) {
-
     }
 }
