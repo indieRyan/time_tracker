@@ -170,6 +170,7 @@ public class MyActivity extends Activity implements OnClickListener {
         int hour = calendar.get(Calendar.HOUR);
         int minute = calendar.get(Calendar.MINUTE);
         time += hour + ":";
+        if (calendar.get(Calendar.MINUTE) < 10) time += "0";
         time += minute;
         if (calendar.get(Calendar.AM_PM) == 0) time += " AM";
         else time += " PM";
@@ -218,7 +219,7 @@ public class MyActivity extends Activity implements OnClickListener {
             hours = totalSeconds / 3600;
             totalSeconds = totalSeconds % 3600;
         }
-        if (totalSeconds > 60) {
+        if (totalSeconds >= 60) {
             minutes = totalSeconds / 60;
         }
 
@@ -333,6 +334,7 @@ public class MyActivity extends Activity implements OnClickListener {
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.check_in_button);
         columnCheckIn.addView(textView);
+        dailyCheckInView.add(textView);
     }
 
     private void addCheckOutTextView(int position) {
@@ -346,6 +348,7 @@ public class MyActivity extends Activity implements OnClickListener {
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.check_out_button);
         columnCheckOut.addView(textView);
+        dailyCheckOutView.add(textView);
     }
 
     private void addTotalTextView(int position) {
@@ -359,6 +362,7 @@ public class MyActivity extends Activity implements OnClickListener {
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.log_total_time);
         columnTotal.addView(textView);
+        dailyTotalView.add(textView);
     }
 
     private void loadTodayLog() {
