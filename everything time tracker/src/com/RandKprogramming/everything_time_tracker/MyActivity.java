@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.io.File;
 import java.util.*;
 
 
@@ -150,12 +149,16 @@ public class MyActivity extends Activity implements OnClickListener {
 
     private String getCurrentDate() {
         calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        int year = calendar.get(Calendar.YEAR);
+
         String date = "";
-        if (calendar.get(Calendar.MONTH) < 10) date += 0;
-        date += (calendar.get(Calendar.MONTH) + 1) + "%";
-        if (calendar.get(Calendar.DAY_OF_MONTH) < 10) date += 0;
-        date += calendar.get(Calendar.DAY_OF_MONTH) + "%";
-        date += calendar.get(Calendar.YEAR);
+        if (month < 10) date += 0;
+        date += month + "%";
+        if (day < 10) date += 0;
+        date += day + "%";
+        date += year;
         return date;
     }
 
@@ -223,7 +226,9 @@ public class MyActivity extends Activity implements OnClickListener {
             minutes = totalSeconds / 60;
         }
 
-        time += hours + ":" + minutes;
+        time += hours + ":";
+        if (minutes < 10) time += "0";
+        time += minutes;
 
         return time;
     }
@@ -367,20 +372,30 @@ public class MyActivity extends Activity implements OnClickListener {
 
     private void loadTodayLog() {
 
-        checkInTime = FileIO.readFromInternalStorage(this, date + FileIO.CHECK_IN);
+        checkInTime = FileIO.readListFromInternalStorage(this, date + FileIO.CHECK_IN);
         for (int i = 0; i < checkInTime.size(); i++) {
             addCheckInTextView(i);
         }
 
 
-        checkOutTime = FileIO.readFromInternalStorage(this, date + FileIO.CHECK_OUT);
+        checkOutTime = FileIO.readListFromInternalStorage(this, date + FileIO.CHECK_OUT);
         for (int i = 0; i < checkOutTime.size(); i++) {
             addCheckOutTextView(i);
         }
 
-        totalTime = FileIO.readFromInternalStorage(this, date + FileIO.DAILY_TOTAL);
+        totalTime = FileIO.readListFromInternalStorage(this, date + FileIO.DAILY_TOTAL);
         for (int i = 0; i < totalTime.size(); i++) {
             addTotalTextView(i);
         }
+    }
+
+    public void onPause() {
+        super.onPause();
+        FileIO.saveToInternalStorage(canCheckOut, this, date + "canCheckOut");
+    }
+
+    public void onResume() {
+        super.onResume();
+        canCheckOut = FileIO.readBooleanFromInternalStorage(this, date + "canCheckOut");
     }
 }

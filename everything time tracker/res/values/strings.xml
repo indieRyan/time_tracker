@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Everything Time Tracker</string>
+
+    <!--daily_totals-->
+    <string name="daily_previous">&lt;&lt;back</string>
+    <string name="daily_next">next&gt;&gt;</string>
+    <string name="daily_check_in">Check in</string>
+    <string name="daily_check_out">Check out</string>
+    <string name="daily_total">Total</string>
+
 </resources>

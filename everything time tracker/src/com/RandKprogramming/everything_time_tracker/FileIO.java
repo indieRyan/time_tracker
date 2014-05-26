@@ -28,7 +28,20 @@ public class FileIO {
         }
     }
 
-    public static ArrayList<String> readFromInternalStorage(Context context, String fileName) {
+    public static void saveToInternalStorage(boolean bool, Context context, String fileName) {
+        try {
+            FileOutputStream fos = context.openFileOutput(fileName, context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeBoolean(bool);
+            oos.flush();
+            oos.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<String> readListFromInternalStorage(Context context, String fileName) {
         ArrayList list = new ArrayList();
         FileInputStream fin;
 
@@ -43,5 +56,20 @@ public class FileIO {
             Log.e("InternalStorage", e.getMessage());
         }
         return list;
+    }
+
+    public static boolean readBooleanFromInternalStorage(Context context, String fileName) {
+        boolean bool = false;
+        FileInputStream fin;
+
+        try {
+            fin = context.openFileInput(fileName);
+            ObjectInputStream ois = new ObjectInputStream(fin);
+            bool = ois.readBoolean();
+            ois.close();
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bool;
     }
 }

@@ -6,14 +6,37 @@
               android:layout_height="match_parent">
 
     <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" android:gravity="center">
         <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Date:"
-                android:id="@+id/daily_date" android:textSize="20sp"/>
+                android:id="@+id/daily_date" android:textSize="20sp" android:gravity="center_horizontal"
+                android:layout_weight="1" android:textIsSelectable="true"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:gravity="center_horizontal">
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/daily_check_in"
+                android:id="@+id/textView" android:layout_gravity="center" android:textSize="15sp"
+                android:layout_weight="1" android:gravity="center_horizontal"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView2" android:layout_gravity="center" android:text="@string/daily_check_out"
+                android:textSize="15sp" android:layout_weight="1" android:gravity="center_horizontal"/>
+        <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/daily_total"
+                android:id="@+id/textView3" android:layout_gravity="center" android:textSize="15sp"
+                android:layout_weight="1" android:gravity="center_horizontal"/>
     </LinearLayout>
     <ScrollView
             android:layout_width="match_parent"
@@ -31,33 +54,18 @@
                     android:layout_weight="1"
                     android:padding="5dp">
 
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Check In"
-                        android:id="@+id/textView" android:layout_gravity="center" android:textSize="15sp"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/daily_total_out"
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent" android:layout_weight="1" android:padding="5dp">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/textView2" android:layout_gravity="center" android:text="Check Out"
-                        android:textSize="15sp"/>
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/daily_total_total"
                     android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent" android:layout_weight="1" android:padding="5dp">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Total"
-                        android:id="@+id/textView3" android:layout_gravity="center" android:textSize="15sp"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
@@ -69,6 +77,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Time: "
-                android:id="@+id/daily_total" android:layout_gravity="center" android:textSize="20sp"/>
+                android:id="@+id/daily_total" android:layout_gravity="center" android:textSize="25sp"
+                android:textIsSelectable="true"/>
+    </LinearLayout>
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" android:layout_gravity="center_horizontal">
+        <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/daily_previous"
+                android:id="@+id/daily_back" android:layout_weight="1" android:textSize="20sp"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" android:layout_weight="1">
+        </LinearLayout>
+        <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/daily_next"
+                android:id="@+id/daily_next" android:layout_weight="1" android:textSize="20sp"/>
     </LinearLayout>
 </LinearLayout>
