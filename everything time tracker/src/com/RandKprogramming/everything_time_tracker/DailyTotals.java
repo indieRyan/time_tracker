@@ -20,6 +20,7 @@ public class DailyTotals extends Activity{
 
     Calendar calendar;
     String date;
+    TextView tvDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,8 @@ public class DailyTotals extends Activity{
     private void init() {
         calendar = Calendar.getInstance();
         date = getCurrentDate();
+        tvDate = (TextView) findViewById(R.id.daily_date);
+        tvDate.setText("Date: " + date.replace('%', '/'));
 
         columnCheckIn = (LinearLayout) findViewById(R.id.daily_total_in);
         columnCheckOut = (LinearLayout)findViewById(R.id.daily_total_out);
@@ -41,8 +44,10 @@ public class DailyTotals extends Activity{
     private String getCurrentDate() {
         calendar = Calendar.getInstance();
         String date = "";
-        date += (calendar.get(Calendar.MONTH) + 1);
-        date += calendar.get(calendar.DAY_OF_MONTH);
+        if (calendar.get(Calendar.MONTH) < 10) date += 0;
+        date += (calendar.get(Calendar.MONTH) + 1) + "%";
+        if (calendar.get(Calendar.DAY_OF_MONTH) < 10) date += 0;
+        date += calendar.get(Calendar.DAY_OF_MONTH) + "%";
         date += calendar.get(Calendar.YEAR);
         return date;
     }

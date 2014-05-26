@@ -36,6 +36,7 @@ public class MyActivity extends Activity implements OnClickListener {
 
     Calendar calendar;
     String date;
+    TextView tvDate;
 
     private boolean canCheckOut;
 
@@ -57,6 +58,8 @@ public class MyActivity extends Activity implements OnClickListener {
         columnTotal = (LinearLayout) findViewById(R.id.total_time_column);
 
         date = getCurrentDate();
+        tvDate = (TextView) findViewById(R.id.main_date);
+        tvDate.setText("Date: " + date.replace('%', '/'));
         loadTodayLog();
 
         // Buttons
@@ -148,8 +151,10 @@ public class MyActivity extends Activity implements OnClickListener {
     private String getCurrentDate() {
         calendar = Calendar.getInstance();
         String date = "";
-        date += (calendar.get(Calendar.MONTH) + 1);
-        date += calendar.get(calendar.DAY_OF_MONTH);
+        if (calendar.get(Calendar.MONTH) < 10) date += 0;
+        date += (calendar.get(Calendar.MONTH) + 1) + "%";
+        if (calendar.get(Calendar.DAY_OF_MONTH) < 10) date += 0;
+        date += calendar.get(Calendar.DAY_OF_MONTH) + "%";
         date += calendar.get(Calendar.YEAR);
         return date;
     }
@@ -164,10 +169,10 @@ public class MyActivity extends Activity implements OnClickListener {
         String time = "";
         int hour = calendar.get(Calendar.HOUR);
         int minute = calendar.get(Calendar.MINUTE);
-        int second = calendar.get(Calendar.SECOND);
         time += hour + ":";
-        time += minute + ":";
-        time += second;
+        time += minute;
+        if (calendar.get(Calendar.AM_PM) == 0) time += " AM";
+        else time += " PM";
         return time;
     }
 
@@ -184,7 +189,7 @@ public class MyActivity extends Activity implements OnClickListener {
         String endTime = checkOutTime.get(position);
         int start;
         int end;
-        int totalSeconds = 0;
+        int totalSeconds;
         int totalStartSeconds = 0;
         int totalEndSeconds = 0;
 
@@ -195,8 +200,6 @@ public class MyActivity extends Activity implements OnClickListener {
         start = end + 1;
         end = startTime.lastIndexOf(':');
         totalStartSeconds += Integer.parseInt(startTime.substring(start, end)) * 60;
-        start = end + 1;
-        totalStartSeconds += Integer.parseInt(startTime.substring(start, startTime.length()));
 
         // Convert check out time into seconds
         start = 0;
@@ -205,25 +208,21 @@ public class MyActivity extends Activity implements OnClickListener {
         start = end + 1;
         end = endTime.lastIndexOf(':');
         totalEndSeconds += Integer.parseInt(endTime.substring(start, end)) * 60;
-        start = end + 1;
-        totalEndSeconds += Integer.parseInt(endTime.substring(start, endTime.length()));
 
         // Calculates total of seconds from check in time to check out time
         totalSeconds = totalEndSeconds - totalStartSeconds;
 
-        // Convert totalSeconds into a String ("format" hours : minutes : totalSeconds);
-        int hours = 0, minutes = 0, seconds = 0;
+        // Convert totalSeconds into a String ("format" hours : minutes);
+        int hours = 0, minutes = 0;
         if (totalSeconds > 3600) {
             hours = totalSeconds / 3600;
             totalSeconds = totalSeconds % 3600;
         }
         if (totalSeconds > 60) {
             minutes = totalSeconds / 60;
-            totalSeconds = totalSeconds % 60;
         }
-        if (totalSeconds > 0) seconds = totalSeconds;
 
-        time += hours + ":" + minutes + ":" + seconds;
+        time += hours + ":" + minutes;
 
         return time;
     }
