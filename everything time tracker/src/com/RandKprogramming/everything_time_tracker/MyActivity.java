@@ -198,7 +198,7 @@ public class MyActivity extends Activity implements OnClickListener {
         end = startTime.indexOf(':');
         totalStartSeconds += Integer.parseInt(startTime.substring(start, end)) * 3600;
         start = end + 1;
-        end = startTime.lastIndexOf(':');
+        end = startTime.length() - 3;
         totalStartSeconds += Integer.parseInt(startTime.substring(start, end)) * 60;
 
         // Convert check out time into seconds
@@ -206,7 +206,7 @@ public class MyActivity extends Activity implements OnClickListener {
         end = endTime.indexOf(':');
         totalEndSeconds += Integer.parseInt(endTime.substring(start, end)) * 3600;
         start = end + 1;
-        end = endTime.lastIndexOf(':');
+        end = startTime.length() - 3;
         totalEndSeconds += Integer.parseInt(endTime.substring(start, end)) * 60;
 
         // Calculates total of seconds from check in time to check out time
