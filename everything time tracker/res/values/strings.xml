@@ -2,11 +2,15 @@
 <resources>
     <string name="app_name">Everything Time Tracker</string>
 
+    <string name="back">&lt;&lt;back</string>
+    <string name="next">next&gt;&gt;</string>
+    <string name="total_time">Total Time:</string>
+    <string name="total">Total</string>
+
     <!--daily_totals-->
-    <string name="daily_previous">&lt;&lt;back</string>
-    <string name="daily_next">next&gt;&gt;</string>
     <string name="daily_check_in">Check in</string>
     <string name="daily_check_out">Check out</string>
-    <string name="daily_total">Total</string>
 
+    <!-- weekly_totals -->
+    <string name="weekly_date">Date:</string>
 </resources>

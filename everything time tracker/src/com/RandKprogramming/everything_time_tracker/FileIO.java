@@ -9,13 +9,14 @@ import java.util.List;
 
 public class FileIO {
 
-    public static final String CHECK_IN = "bCheckIn";
-    public static final String CHECK_OUT = "check_out";
-    public static final String DAILY_TOTAL = "dailyTotal";
+    public static final String CHECK_IN = "checkIn";
+    public static final String CHECK_OUT = "checkOut";
+    public static final String LOG_TOTAL = "logTotal";
+    public static final String DAILY_TOTAL = "dailyTotalString";
     public static final String WEEKLY_TOTAL = "weeklyTotal";
     public static final String MONTHLY_TOTAL = "monthlyTotal";
 
-    public static void saveToInternalStorage(List list, Context context, String fileName) {
+    public static void saveListToInternalStorage(List list, Context context, String fileName) {
         try {
             FileOutputStream fos = context.openFileOutput(fileName, context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -28,7 +29,7 @@ public class FileIO {
         }
     }
 
-    public static void saveToInternalStorage(boolean bool, Context context, String fileName) {
+    public static void saveBooleanToInternalStorage(boolean bool, Context context, String fileName) {
         try {
             FileOutputStream fos = context.openFileOutput(fileName, context.MODE_PRIVATE);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -41,7 +42,20 @@ public class FileIO {
         }
     }
 
-    public static ArrayList<String> readListFromInternalStorage(Context context, String fileName) {
+    public static void saveIntToInternalStorage(int number, Context context, String fileName) {
+        try {
+            FileOutputStream fos = context.openFileOutput(fileName, context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeInt(number);
+            oos.flush();
+            oos.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList readListFromInternalStorage(Context context, String fileName) {
         ArrayList list = new ArrayList();
         FileInputStream fin;
 
@@ -71,5 +85,20 @@ public class FileIO {
             e.printStackTrace();
         }
         return bool;
+    }
+
+    public static int readIntFromInternalStorage(Context context, String fileName) {
+        int number = 0;
+        FileInputStream fin;
+
+        try {
+            fin = context.openFileInput(fileName);
+            ObjectInputStream ois = new ObjectInputStream(fin);
+            number = ois.readInt();
+            ois.close();
+        }  catch (IOException e) {
+            e.printStackTrace();
+        }
+        return number;
     }
 }

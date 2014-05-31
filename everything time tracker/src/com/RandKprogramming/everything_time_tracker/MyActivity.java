@@ -18,7 +18,7 @@ public class MyActivity extends Activity implements OnClickListener {
     // Lists for TextViews that log time
     List<TextView> dailyCheckInView = new ArrayList<TextView>();
     List<TextView> dailyCheckOutView = new ArrayList<TextView>();
-    List<TextView> dailyTotalView = new ArrayList<TextView>();
+    List<TextView> logTotal = new ArrayList<TextView>();
 
     // Button IDs for TextViews that logged time
     List<Integer> checkInId = new ArrayList<Integer>();
@@ -29,6 +29,9 @@ public class MyActivity extends Activity implements OnClickListener {
     List<String> checkInTime = new ArrayList<String>();
     List<String> checkOutTime = new ArrayList<String>();
     List<String> totalTime = new ArrayList<String>();
+
+    // Total time at end of the startD
+    int dailyTotals;
 
     Button bCheckIn, bCheckOut, bAddCheckIn, bAddCheckOut, bDailyTotals, bWeeklyTotals, bMonthlyTotals;
     LinearLayout columnCheckIn, columnCheckOut, columnTotal;
@@ -108,11 +111,13 @@ public class MyActivity extends Activity implements OnClickListener {
                 break;
             case R.id.day_total:
                 System.out.println("Day Totals");
-                Intent intent = new Intent(this, DailyTotals.class);
-                startActivity(intent);
+                Intent dailyIntent = new Intent(this, DailyTotals.class);
+                startActivity(dailyIntent);
                 break;
             case R.id.week_total:
                 System.out.println("Week totals");
+                Intent weeklyIntent = new Intent(this, WeeklyTotals.class);
+                startActivity(weeklyIntent);
                 break;
             case R.id.month_total:
                 System.out.println("Month totals");
@@ -215,6 +220,9 @@ public class MyActivity extends Activity implements OnClickListener {
 
         // Calculates total of seconds from check in time to check out time
         totalSeconds = totalEndSeconds - totalStartSeconds;
+        if (totalSeconds >= 60) {
+            dailyTotals += totalSeconds;
+        }
 
         // Convert totalSeconds into a String ("format" hours : minutes);
         int hours = 0, minutes = 0;
@@ -263,7 +271,7 @@ public class MyActivity extends Activity implements OnClickListener {
         columnCheckIn.addView(checkIn);
 
         // Saving the check out time to internal storage
-        FileIO.saveToInternalStorage(checkInTime, this, date + FileIO.CHECK_IN);
+        FileIO.saveListToInternalStorage(checkInTime, this, date + FileIO.CHECK_IN);
     }
 
     /**
@@ -292,16 +300,16 @@ public class MyActivity extends Activity implements OnClickListener {
         columnCheckOut.addView(checkOut);
 
         // Saving the check out time to internal storage
-        FileIO.saveToInternalStorage(checkOutTime, this, date + FileIO.CHECK_OUT);
+        FileIO.saveListToInternalStorage(checkOutTime, this, date + FileIO.CHECK_OUT);
     }
 
     /**
-     * creates and adds a new TextView to {@link #columnTotal} and {@link #dailyTotalView}. Sets the Id and saves it to {@link #totalId}.
+     * creates and adds a new TextView to {@link #columnTotal} and {@link #logTotal}. Sets the Id and saves it to {@link #totalId}.
      * Saves the difference between check in and check out times in {@link #totalTime}.
      */
     private void createTotalTextView() {
         // Retrieving time between check in and check out
-        String time = getTotalTime(dailyTotalView.size());
+        String time = getTotalTime(logTotal.size());
 
         // Create TextView. Set size and layout.
         TextView logTotal = new TextView(this);
@@ -315,13 +323,13 @@ public class MyActivity extends Activity implements OnClickListener {
         logTotal.setBackgroundResource(R.drawable.log_total_time);
 
         // Saving the TextView, TextView id and the time logged. Also adding the TextView to the corresponding LinearLayout.
-        dailyTotalView.add(logTotal);
+        this.logTotal.add(logTotal);
         totalId.add(logTotal.getId());
         totalTime.add(time);
         columnTotal.addView(logTotal);
 
         // Saving the total time to internal storage.
-        FileIO.saveToInternalStorage(totalTime, this, date + FileIO.DAILY_TOTAL);
+        FileIO.saveListToInternalStorage(totalTime, this, date + FileIO.LOG_TOTAL);
     }
 
     //---------------------------------------------------
@@ -367,7 +375,7 @@ public class MyActivity extends Activity implements OnClickListener {
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.log_total_time);
         columnTotal.addView(textView);
-        dailyTotalView.add(textView);
+        logTotal.add(textView);
     }
 
     private void loadTodayLog() {
@@ -383,7 +391,7 @@ public class MyActivity extends Activity implements OnClickListener {
             addCheckOutTextView(i);
         }
 
-        totalTime = FileIO.readListFromInternalStorage(this, date + FileIO.DAILY_TOTAL);
+        totalTime = FileIO.readListFromInternalStorage(this, date + FileIO.LOG_TOTAL);
         for (int i = 0; i < totalTime.size(); i++) {
             addTotalTextView(i);
         }
@@ -391,11 +399,14 @@ public class MyActivity extends Activity implements OnClickListener {
 
     public void onPause() {
         super.onPause();
-        FileIO.saveToInternalStorage(canCheckOut, this, date + "canCheckOut");
+        FileIO.saveBooleanToInternalStorage(canCheckOut, this, date + "canCheckOut");
+        FileIO.saveIntToInternalStorage(dailyTotals, this, date + FileIO.DAILY_TOTAL);
     }
 
     public void onResume() {
         super.onResume();
         canCheckOut = FileIO.readBooleanFromInternalStorage(this, date + "canCheckOut");
+        dailyTotals = FileIO.readIntFromInternalStorage(this, date + FileIO.DAILY_TOTAL);
+        System.out.println("DailyTotals " + dailyTotals);
     }
 }

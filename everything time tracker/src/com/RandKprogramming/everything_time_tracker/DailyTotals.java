@@ -34,6 +34,8 @@ public class DailyTotals extends Activity implements OnClickListener {
     }
 
     private void init() {
+        calendar = Calendar.getInstance();
+
         bBack = (Button) findViewById(R.id.daily_back);
         bBack.setOnClickListener(this);
         bNext = (Button) findViewById(R.id.daily_next);
@@ -41,7 +43,6 @@ public class DailyTotals extends Activity implements OnClickListener {
 
         tvDate = (TextView) findViewById(R.id.daily_date);
         tvTotalTime = (TextView) findViewById(R.id.daily_total);
-        calendar = Calendar.getInstance();
         date = getCurrentDate();
         tvDate.setText("Date: " + date.replace('%', '/'));
 
@@ -54,12 +55,12 @@ public class DailyTotals extends Activity implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.daily_next:
-                date = nextDay(day, month, year);
+                date = nextDay();
                 tvDate.setText("Date: " + date.replace('%', '/'));
                 loadDailyTimes();
                 break;
             case R.id.daily_back:
-                date = previousDay(day, month, year);
+                date = previousDay();
                 tvDate.setText("Date: " + date.replace('%', '/'));
                 loadDailyTimes();
                 break;
@@ -75,7 +76,6 @@ public class DailyTotals extends Activity implements OnClickListener {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50);
         params.setMargins(0, 5, 0, 5);
         textView.setLayoutParams(params);
-        textView.setId(position + 100);
         textView.setText(checkIn.get(position));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.check_in_button);
@@ -87,7 +87,6 @@ public class DailyTotals extends Activity implements OnClickListener {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50);
         params.setMargins(0, 5, 0, 5);
         textView.setLayoutParams(params);
-        textView.setId(position + 200);
         textView.setText(checkOut.get(position));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.check_out_button);
@@ -99,7 +98,6 @@ public class DailyTotals extends Activity implements OnClickListener {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 50);
         params.setMargins(0, 5, 0, 5);
         textView.setLayoutParams(params);
-        textView.setId(position + 300);
         textView.setText(total.get(position));
         textView.setGravity(Gravity.CENTER);
         textView.setBackgroundResource(R.drawable.log_total_time);
@@ -111,7 +109,6 @@ public class DailyTotals extends Activity implements OnClickListener {
     //------------------------
 
     private String getCurrentDate() {
-        calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH);
         month = calendar.get(Calendar.MONTH) + 1;
         year = calendar.get(Calendar.YEAR);
@@ -125,7 +122,7 @@ public class DailyTotals extends Activity implements OnClickListener {
         return date;
     }
 
-    private String nextDay(int day, int month, int year) {
+    private String nextDay() {
         String date = "";
 
         System.out.println(month + "/" + day + "/" + year);
@@ -139,10 +136,6 @@ public class DailyTotals extends Activity implements OnClickListener {
             month = 1;
         }
 
-        this.day = day;
-        this.month = month;
-        this.year = year;
-
         if (month < 10) date += "0";
         date += month + "%";
         if (day < 10) date += "0";
@@ -151,7 +144,7 @@ public class DailyTotals extends Activity implements OnClickListener {
         return date;
     }
 
-    private String previousDay(int day, int month, int year) {
+    private String previousDay() {
         String date = "";
 
         day--;
@@ -163,10 +156,6 @@ public class DailyTotals extends Activity implements OnClickListener {
             }
             day = getLastDayOfMonth(month - 1);
         }
-
-        this.day = day;
-        this.month = month;
-        this.year = year;
 
         if (month < 10) date += "0";
         date += month + "%";
@@ -229,7 +218,7 @@ public class DailyTotals extends Activity implements OnClickListener {
         // Reset ArrayList
         checkIn = FileIO.readListFromInternalStorage(this, date + FileIO.CHECK_IN);
         checkOut = FileIO.readListFromInternalStorage(this, date + FileIO.CHECK_OUT);
-        total = FileIO.readListFromInternalStorage(this, date + FileIO.DAILY_TOTAL);
+        total = FileIO.readListFromInternalStorage(this, date + FileIO.LOG_TOTAL);
 
         // Reset TotalTime
         timeCount = 0;
